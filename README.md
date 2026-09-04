@@ -37,3 +37,75 @@ El sistema cuenta con una topología de potencia robusta:
 
 *   **Interfaz Visual:** Vúmetro analógico basado en el driver **LM3914N** alimentado a 9V, que excita una barra de 10 segmentos LED (HDSP-4830) de forma lineal.
 *   **Acondicionamiento de Señal:** Para visualizar la salida digital del Arduino, incorpora un filtro pasa-bajas RC (resistencia de 4.7 kΩ y capacitor de 10 µF) que convierte el tren de pulsos PWM en una señal DC estable, garantizando una lectura continua sin parpadeos visuales. El rango de referencia es calibrable mediante un potenciómetro de 5k.
+
+*   # 🔌 Documentación de Hardware: Pinout y Conexiones (Take-Home Labs)
+
+Este documento detalla el mapa de conexiones de la placa principal hacia los diferentes módulos (plantas) y periféricos, diseñado para facilitar el desarrollo del firmware y la programación de control. 
+
+La tarjeta está diseñada como un shield para la arquitectura de Arduino Mega, integrando acondicionamiento de potencia y ruteo específico para cada planta de laboratorio.
+
+## 1. Módulos de Control (Plantas)
+
+### J10 - Planta Motor DC
+Conector dedicado para el control de un Motor DC con retroalimentación por encoder.
+* **Pin 1:** Señal PWM (Pin 9)
+* **Pin 2:** ENCODER_A (Pin 18 / TX1) - *Soporta interrupciones*
+* **Pin 3:** ENCODER_B (Pin 19 / RX1) - *Soporta interrupciones*
+* **Pin 4:** GND
+* **Pin 5:** 5V (Lógica)
+* **Pin 6:** 12V (Potencia motor)
+
+### J8 - Planta RC
+Interfaz para la planta de respuesta RC (Resistiva-Capacitiva) / Señales análogas y digitales.
+* **Pin 1:** A12 (Lectura analógica)
+* **Pin 2:** A13 (Lectura analógica)
+* **Pin 3:** A14 (Lectura analógica)
+* **Pin 4:** A15 (Lectura analógica)
+* **Pin 5:** D7 (Digital)
+* **Pin 6:** D6 (Digital)
+* **Pin 7:** D5 (Digital)
+* **Pin 8:** GND
+* **Pin 9:** +5V
+
+### J15 - Planta LED
+* **Pin 1:** 9V (Potencia)
+* **Pin 2:** GND
+* **Pin 3:** Señal PWM (Pin 9)
+* **Pin 4:** A7 (Lectura analógica)
+
+---
+
+## 2. Periféricos e Interfaz de Usuario
+
+### J9 - Display (I2C)
+Conexión directa para pantalla LCD/OLED vía I2C.
+* **Pin 1:** SCL (Pin 21)
+* **Pin 2:** SDA (Pin 20)
+* **Pin 3:** +5V
+* **Pin 4:** GND
+
+### SW1 - Rotary Encoder (Interfaz de Menú)
+* **Terminal A:** Pin 9 (PWM / Digital)
+* **Terminal Común:** GND
+* **Terminal B:** Pin 8 (Digital)
+*(Nota: Incluye capacitores de filtrado/debounce de 100nF en hardware).*
+
+---
+
+## 3. Puertos de Expansión (Sensores y Actuadores Extra)
+
+* **J12 (ADC):** GND, A10, A11, A12.
+* **J13 (PWM):** GND, D6, D5, D4, D3.
+* **J14 (PIR / Trigger):** Entrada para sensor PIR, conectado a PD_ y GND.
+
+---
+
+## 4. Sistema de Potencia y Puntos de Prueba (Test Points)
+La placa cuenta con un sistema de regulación escalonada alimentada desde un Barrel Jack (15V nominales). Al momento de ensamblar, verificar voltajes en los siguientes Test Points (TP):
+
+* **TP1:** 5V_Arduino (Regulado por L7805 U3)
+* **TP2:** 5V General (Regulado por L7805 U5)
+* **TP3:** 9V (Regulado por L7809 U6)
+* **TP4:** 12V (Regulado por LM350 U1 ajustable)
+* **TP5:** GND (Tierra común)
+
